@@ -23,7 +23,7 @@ public class PatientController {
     private PatientRepository patientRepository;
 
     @GetMapping("/user/index")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String index(Model model,
                          @RequestParam(name ="page",defaultValue = "0") int page,
                          @RequestParam(name ="size",defaultValue = "4")int size,
@@ -37,7 +37,7 @@ public class PatientController {
     }
 
     @GetMapping("/admin/delete")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String delete(@RequestParam(name ="id") Long id,
                          @RequestParam(name ="keyword",defaultValue = "") String keyword,
                          @RequestParam(name ="page",defaultValue = "0") int page){
@@ -46,20 +46,20 @@ public class PatientController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String home(){
         return "redirect:/user/index";
     }
 
     @GetMapping("/admin/formPatients")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String formPatients(Model model){
         model.addAttribute("patient",new Patient());
         return "formPatients";
     }
 
     @PostMapping("/admin/savePatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String savePatient(@Valid Patient patient, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "formPatients";
@@ -69,7 +69,7 @@ public class PatientController {
         return "redirect:/user/index?keyword="+patient.getNom();
     }
     @GetMapping("/admin/editerPatient")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String editerPatient(Model model,
                                 @RequestParam(name = "id") Long id)
     {

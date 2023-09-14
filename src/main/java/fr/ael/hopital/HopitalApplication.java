@@ -64,13 +64,13 @@ public class HopitalApplication implements CommandLineRunner {
         PasswordEncoder passwordEncoder= passwordEncoder();
         return args -> {
                 jdbcUserDetailsManager.createUser(
-                        User.withUsername("user1").password(passwordEncoder.encode("1234")).roles("USER").build()
+                        User.withUsername("user1").password(passwordEncoder.encode("1234")).authorities("USER").build()
                 );
             jdbcUserDetailsManager.createUser(
-                    User.withUsername("user2").password(passwordEncoder.encode("1234")).roles("USER").build()
+                    User.withUsername("user2").password(passwordEncoder.encode("1234")).authorities("USER").build()
             );
             jdbcUserDetailsManager.createUser(
-                    User.withUsername("admin").password(passwordEncoder.encode("1234")).roles("USER","ADMIN").build()
+                    User.withUsername("admin").password(passwordEncoder.encode("1234")).authorities("USER","ADMIN").build()
             );
         };
     }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout " lang="en"
+      layout:decorate="template1.html">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Patients</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div  class="p-3">
+            <div class="card">
+                <div class="card-header">Liste des patients</div>
+                <div class="card-body">
+                    <form method="get" th:action="@{/user/index}">
+                        <label>Keyword:</label>
+                        <input type="text" name="keyword" th:value="${keyword}">
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th> <th>Nom</th> <th>Date de Naissance</th> <th>Malade</th> <th>Score</th>
+                        </tr>
+                        <tr th:each="p:${listPatients}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.nom}"></td>
+                            <td th:text="${p.dateNaissance}"></td>
+                            <td th:text="${p.malade}"></td>
+                            <td th:text="${p.score}"></td>
+                            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <a onclick="return confirm('Etes vous sure de la suppression ?')"
+                                   th:href="@{/admin/delete(id=${p.id},keyword=${keyword},page=${currentPage})}" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                            <td th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <a class="btn btn-success"
+                                   th:href="@{/admin/editerPatient(id=${p.id})}">Editer Patient</a>
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                    <ul class="nav nav-pills">
+                        <li th:each="value,item:${pages}"><!-- item ==> index du tableau-->
+                            <a th:href="@{/user/index(page=${item.index},keyword=${keyword})}"
+                               th:class="${currentPage==item.index?'btn btn-info ms-1':'btn btn-outline-info ms-1'}"
+                               th:text="${1+item.index}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
